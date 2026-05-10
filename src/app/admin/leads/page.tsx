@@ -103,9 +103,9 @@ export default function LeadsExplorer() {
   const filteredLeads = useMemo(() => {
     return leads.filter((l) => {
       const matchesSearch = 
-        l.full_name?.toLowerCase().includes(search.toLowerCase()) || 
-        l.phone?.includes(search) ||
-        l.pincode?.includes(search);
+        (l.full_name?.toLowerCase() ?? "").includes(search.toLowerCase()) || 
+        (l.phone ?? "").includes(search) ||
+        (l.pincode ?? "").includes(search);
         
         const matchesFeature = featureFilters.length === 0 || (l.features && l.features.some(f => featureFilters.includes(f)));
       const matchesLocation = locationFilter === "All" || l.location_type === locationFilter;
@@ -260,7 +260,7 @@ export default function LeadsExplorer() {
                       <td className="px-6 py-4">
                         <p className="text-slate-900 font-black text-base">{lead.full_name}</p>
                         <p className="text-slate-600 font-medium">{lead.phone}</p>
-                        <p className="text-xs text-slate-400 mt-1">{lead.city}, {lead.state} {lead.pincode}</p>
+                        <p className="text-xs text-slate-400 mt-1">{lead.city || 'N/A'}, {lead.state || ''} {lead.pincode || ''}</p>
                       </td>
                       <td className="px-6 py-4">
                         <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-bold border border-slate-200">

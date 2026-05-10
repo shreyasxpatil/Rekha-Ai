@@ -443,12 +443,12 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4">
                         <select
-                          value={l.status}
-                          onChange={(e) => handleStatusChange(l.id, e.target.value as Lead["status"])}
+                          value={l.status || "New"}
+                          onChange={(e) => handleStatusChange(l.id || "", e.target.value as LeadStatus)}
                           className={`text-xs font-bold uppercase tracking-wider rounded-full px-3 py-1.5 border appearance-none cursor-pointer outline-none transition-colors ${
-                            l.status === "New" ? "bg-orange-50 text-orange-600 border-orange-200 focus:ring-2 focus:ring-orange-500/20" :
-                            l.status === "Called" ? "bg-blue-50 text-blue-600 border-blue-200 focus:ring-2 focus:ring-blue-500/20" :
-                            l.status === "Closed" ? "bg-emerald-50 text-emerald-700 border-emerald-200 focus:ring-2 focus:ring-emerald-500/20" :
+                            (l.status || "New") === "New" ? "bg-orange-50 text-orange-600 border-orange-200 focus:ring-2 focus:ring-orange-500/20" :
+                            (l.status || "New") === "Called" ? "bg-blue-50 text-blue-600 border-blue-200 focus:ring-2 focus:ring-blue-500/20" :
+                            (l.status || "New") === "Closed" ? "bg-emerald-50 text-emerald-700 border-emerald-200 focus:ring-2 focus:ring-emerald-500/20" :
                             "bg-red-50 text-red-600 border-red-200 focus:ring-2 focus:ring-red-500/20"
                           }`}
                         >
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 text-center">
                         <a 
-                          href={`https://wa.me/${l.phone.replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(l.full_name)},%20I'm%20looking%20at%20your%20configuration%20for%20Rekha%20AI%20in%20${encodeURIComponent(l.city)}.%20Can%20we%20talk?`}
+                          href={`https://wa.me/${(l.phone || "").replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(l.full_name || "Client")},%20I'm%20looking%20at%20your%20configuration%20for%20Rekha%20AI%20in%20${encodeURIComponent(l.city || "your city")}.%20Can%20we%20talk?`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center justify-center p-2 rounded-xl bg-green-50 text-green-600 hover:bg-green-500 hover:text-white transition-all shadow-sm border border-green-100 hover:border-green-500"
