@@ -7,7 +7,7 @@ export interface Lead {
   phone?: string;
   state?: string;
   city?: string;
-  pincode?: string; 
+  pincode?: string;
   location_type?: string;
   camera_brand?: string;
   camera_count?: number | string;
