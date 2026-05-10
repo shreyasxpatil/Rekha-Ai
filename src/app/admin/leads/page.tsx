@@ -250,7 +250,7 @@ export default function LeadsExplorer() {
               </thead>
               <tbody className="divide-y divide-slate-100 bg-white">
                 {filteredLeads.map((lead) => {
-                  const dateObj = new Date(lead.created_at);
+                  const dateObj = new Date(lead.created_at!);
                   return (
                     <tr key={lead.id} className="hover:bg-slate-50/80 transition-colors group">
                       <td className="px-6 py-4">
