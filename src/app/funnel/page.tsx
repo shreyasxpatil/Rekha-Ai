@@ -299,7 +299,7 @@ function Step2({ lead, setLead }: { lead: LeadState; setLead: (l: LeadState) => 
         label="PROACTIVE SECURITY"
         title={
           <>
-            Standard CCTVs only provide footage after a theft. <span className="font-black"><span className="text-white">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> analyzes live feeds</span> to detect and stop intruders in real-time.
+            Standard CCTVs only provide footage after a theft. <span className="font-black"><span className="text-slate-900 font-black">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> analyzes live feeds</span> to detect and stop intruders in real-time.
           </>
         }
       />
@@ -338,7 +338,7 @@ function Step3({ lead, setLead }: { lead: LeadState; setLead: (l: LeadState) => 
         label="FULL COVERAGE"
         title={
           <>
-            <span className="font-bold"><span className="text-white">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span></span> turns your cameras into a virtual security guard that never sleeps.
+            <span className="font-bold"><span className="text-slate-900 font-black">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span></span> turns your cameras into a virtual security guard that never sleeps.
           </>
         }
       />
@@ -446,12 +446,12 @@ function Step5({ lead }: { lead: LeadState }) {
         title={
           <>
             Monitoring 4 cameras needs 2 guards ₹40,000/mo.{" "}
-            <span className="font-extrabold text-1.7xl"><span className="text-white">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> is ₹14,999/mo</span>
+            <span className="font-extrabold text-1.7xl"><span className="text-slate-900 font-black">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> is ₹14,999/mo</span>
           </>
         }
       />
       <h2 className="text-3xl font-extrabold text-slate-800 mb-6 text-center">
-        Your <span className="text-white">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> is ready.
+        Your <span className="text-slate-900 font-black">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span> is ready.
       </h2>
 
       {/* Premium Receipt Card */}
