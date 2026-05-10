@@ -602,7 +602,7 @@ function Step6({ lead, setLead, submitted, setSubmitted, resetForm }: { lead: Le
     <div>
       <h2 className="text-4xl font-black text-slate-900 mb-3 tracking-tight">Last step.</h2>
       <p className="text-lg text-slate-500 mb-10 font-medium">
-        We'll WhatsApp you when your<br></br><span className="font-bold"><span className="text-white"> REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span></span> is ready to ship.
+        We'll WhatsApp you when your<br></br><span className="font-bold"><span className="text-[#2563EB]"> REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span></span> is ready to ship.
       </p>
 
       <form onSubmit={handleSubmit} id="lead-form" className="space-y-5 pb-8">
@@ -762,7 +762,7 @@ export default function FunnelPage() {
           <div className="flex flex-row items-center justify-start gap-3 mb-1 p-0 m-0">
             <img src="/Rekha-Ai logo.png" alt="Rekha AI Logo" className="h-10 md:h-14 w-auto object-contain p-0 m-0" />
             <p className="font-black text-2xl md:text-3xl tracking-widest text-left">
-              <span className="text-white">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span>
+              <span className="text-[#2563EB]">REKHA-</span><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-500 via-[60%] to-[#FACC15]">Ai</span>
             </p>
           </div>
           <div className="flex items-center justify-between mt-2 mb-0">
