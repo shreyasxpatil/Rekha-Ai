@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
-import { Lead } from "@/types/lead";
+import { Lead, LeadStatus } from "@/types/lead";
 import { 
   LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis,
   BarChart, Bar, CartesianGrid
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 
   const totalLeads = leads.length;
   const newLeads = leads.filter((l) => l.status === "New").length;
-  const highValueTargets = leads.filter((l) => l.camera_count >= 8).length;
+  const highValueTargets = leads.filter((l) => Number(l.camera_count || 0) >= 8).length;
   const closedLeads = leads.filter((l) => l.status === "Closed").length;
   const conversionRate = totalLeads ? Math.round((closedLeads / totalLeads) * 100) : 0;
 
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
       days[d.toLocaleDateString("en-US", { month: "short", day: "numeric" })] = 0;
     }
     leads.forEach((l) => {
-      const dateStr = new Date(l.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const dateStr = new Date(l.created_at!).toLocaleDateString("en-US", { month: "short", day: "numeric" });
       if (days[dateStr] !== undefined) days[dateStr]++;
     });
     return Object.entries(days).map(([name, leads]) => ({ name, leads }));
@@ -415,7 +415,7 @@ export default function AdminDashboard() {
                 </tr>
               ) : (
                 filteredLeads.map((l) => {
-                  const dateObj = new Date(l.created_at);
+                  const dateObj = new Date(l.created_at!);
                   return (
                     <tr key={l.id} className="hover:bg-slate-50/80 transition-colors group">
                       <td className="px-6 py-4">
