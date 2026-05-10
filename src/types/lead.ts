@@ -11,5 +11,7 @@ export interface Lead {
   features: string[];
   total_quote: number;
   city: string;
+  state?: string;
+  pincode?: string;
   status: LeadStatus;
 }
