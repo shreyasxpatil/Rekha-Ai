@@ -88,9 +88,9 @@ export default function AdminDashboard() {
   // --- DERIVED STATE / ANALYTICS ---
   const filteredLeads = useMemo(() => {
     return leads.filter((l) => {
-      const matchesSearch = l.full_name?.toLowerCase().includes(search.toLowerCase()) || 
-                            l.phone?.includes(search) || 
-                            l.city?.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = (l.full_name?.toLowerCase() ?? "").includes(search.toLowerCase()) || 
+                            (l.phone ?? "").includes(search) || 
+                            (l.city?.toLowerCase() ?? "").includes(search.toLowerCase());
       const matchesStatus = statusFilter === "All" || l.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
