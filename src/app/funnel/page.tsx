@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { Lead, LeadStatus } from "@/types/lead";
 import {
   ArrowLeft,
   ArrowRight,
@@ -70,11 +71,7 @@ const transition = { duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number,
 
 function RoadmapTimeline({ step, total }: { step: number; total: number }) {
   const steps = [
-    { label: "Location", icon: <MapPin size={14} /> },
-    { label: "Hardware", icon: <Camera size={14} /> },
-    { label: "Quantity", icon: <Layers size={14} /> },
     { label: "AI Models", icon: <Cpu size={14} /> },
-    { label: "Summary", icon: <ShieldCheck size={14} /> },
     { label: "Contact", icon: <UserPlus size={14} /> },
   ];
 
@@ -517,7 +514,21 @@ function Step5({ lead }: { lead: LeadState }) {
 
 // ─── Step 6: Lead Capture ────────────────────────────────────────────────────
 
-function Step6({ lead, setLead, submitted, setSubmitted, resetForm }: { lead: LeadState; setLead: (l: LeadState) => void, submitted: boolean, setSubmitted: (b: boolean) => void, resetForm: () => void }) {
+function Step6({
+  lead,
+  setLead,
+  submitted,
+  setSubmitted,
+  resetForm,
+  leadId,
+}: {
+  lead: LeadState;
+  setLead: (l: LeadState) => void;
+  submitted: boolean;
+  setSubmitted: (b: boolean) => void;
+  resetForm: () => void;
+  leadId: string | null;
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -527,31 +538,45 @@ function Step6({ lead, setLead, submitted, setSubmitted, resetForm }: { lead: Le
     setSubmitError(null);
 
     try {
-      const { error } = await supabase.from("rekha_leads").insert([
-        {
-          full_name: lead.name,
-          phone: lead.phone,
-          state: lead.state,
-          city: lead.city,
-          pincode: lead.pincode,
-          location_type: lead.location,
-          camera_brand: lead.cameraBrand,
-          camera_count: parseInt(lead.cameraCount) || 0,
-          features: lead.features,
-          total_quote: lead.priceNum,
-          status: "New"
-        }
-      ]);
+      let updateError = null;
 
-      if (error) {
-        console.error("Supabase Error:", error);
+      if (leadId) {
+        const { error } = await supabase
+          .from("rekha_leads")
+          .update({
+            full_name: lead.name,
+            phone: lead.phone,
+            state: lead.state,
+            city: lead.city,
+            pincode: lead.pincode,
+            status: "New" as LeadStatus
+          })
+          .eq("id", leadId);
+        updateError = error;
+      } else {
+        const { error } = await supabase.from("rekha_leads").insert([
+          {
+            full_name: lead.name,
+            phone: lead.phone,
+            state: lead.state,
+            city: lead.city,
+            pincode: lead.pincode,
+            features: lead.features,
+            status: "New" as LeadStatus
+          }
+        ]);
+        updateError = error;
+      }
+
+      if (updateError) {
+        console.error("Supabase Error:", updateError);
         setSubmitError("Connection timeout. Please try clicking submit again.");
         setIsSubmitting(false);
         return;
       }
 
       setSubmitted(true);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Catch Error:", err);
       setSubmitError("Connection timeout. Please try clicking submit again.");
     }
@@ -669,7 +694,8 @@ export default function FunnelPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const totalSteps = 6;
+  const [leadId, setLeadId] = useState<string | null>(null);
+  const totalSteps = 2;
 
   const [lead, setLead] = useState<LeadState>({
     location: "",
@@ -685,7 +711,49 @@ export default function FunnelPage() {
     pincode: "",
   });
 
+  const savePartialLead = async () => {
+    try {
+      if (leadId) {
+        const { error } = await supabase
+          .from("rekha_leads")
+          .update({
+            features: lead.features,
+          })
+          .eq("id", leadId);
+
+        if (error) {
+          console.error("Supabase update error:", error);
+        }
+      } else {
+        const { data, error } = await supabase
+          .from("rekha_leads")
+          .insert([
+            {
+              features: lead.features,
+              status: "New" as LeadStatus
+            }
+          ])
+          .select();
+
+        if (error) {
+          console.error("Supabase insert error:", error);
+          return;
+        }
+
+        const insertedLeads = data as Lead[] | null;
+        if (insertedLeads && insertedLeads[0]?.id) {
+          setLeadId(insertedLeads[0].id);
+        }
+      }
+    } catch (err) {
+      console.error("Error in savePartialLead:", err);
+    }
+  };
+
   const next = () => {
+    if (currentStep === 1) {
+      void savePartialLead();
+    }
     setDirection(1);
     setCurrentStep((s) => Math.min(s + 1, totalSteps));
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -702,6 +770,7 @@ export default function FunnelPage() {
     setSubmitted(false);
     setCurrentStep(1);
     setDirection(-1);
+    setLeadId(null);
     setLead({
       location: "",
       cameraBrand: "",
@@ -720,13 +789,21 @@ export default function FunnelPage() {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 1: return <Step1 lead={lead} setLead={setLead} />;
-      case 2: return <Step2 lead={lead} setLead={setLead} />;
-      case 3: return <Step3 lead={lead} setLead={setLead} />;
-      case 4: return <Step4 lead={lead} setLead={setLead} />;
-      case 5: return <Step5 lead={lead} />;
-      case 6: return <Step6 lead={lead} setLead={setLead} submitted={submitted} setSubmitted={setSubmitted} resetForm={resetForm} />;
-      default: return null;
+      case 1:
+        return <Step4 lead={lead} setLead={setLead} />;
+      case 2:
+        return (
+          <Step6
+            lead={lead}
+            setLead={setLead}
+            submitted={submitted}
+            setSubmitted={setSubmitted}
+            resetForm={resetForm}
+            leadId={leadId}
+          />
+        );
+      default:
+        return null;
     }
   };
 
@@ -734,16 +811,11 @@ export default function FunnelPage() {
     let disabled = false;
     let text = "Next Step";
 
-    if (currentStep === 1 && !lead.location) disabled = true;
-    if (currentStep === 2 && !lead.cameraBrand) disabled = true;
-    if (currentStep === 3 && !lead.cameraCount) disabled = true;
-
-    if (currentStep === 4) {
-      text = "See my price";
-    }
-
-    if (currentStep === 5) {
-      text = "I want this — Continue";
+    if (currentStep === 1) {
+      if (lead.features.length === 0) {
+        disabled = true;
+      }
+      text = "Next";
     }
 
     return { disabled, text };
@@ -792,7 +864,7 @@ export default function FunnelPage() {
       </div>
 
       {/* Sticky Footer */}
-      {!submitted && currentStep < 6 && (
+      {!submitted && currentStep < totalSteps && (
         <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
