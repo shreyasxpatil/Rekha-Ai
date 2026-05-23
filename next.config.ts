@@ -10,6 +10,17 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60,
   },
 
+  // Redirect root traffic directly into the 2-step lead funnel
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/funnel",
+        permanent: true, // 308 — cached by browsers & CDN edges
+      },
+    ];
+  },
+
   // Aggressive HTTP caching headers for static assets
   async headers() {
     return [
